@@ -100,9 +100,6 @@ char *tostring(double d)
 
     int length = getLengthOfInt(a);
 
-    printf("%in %ilength\n", n, length);
-    printf("ZEROES: %i\n", numberOfZerosInFront);
-
     int additional = 1;
     if (decimalPoint == 0)
     {
@@ -114,7 +111,6 @@ char *tostring(double d)
     int rem;
     while (i > -1)
     {
-        printf("%i\n", i);
         if (i == decimalPoint)
         {
             str[i] = '.';
@@ -123,7 +119,6 @@ char *tostring(double d)
         }
         if (i < numberOfZerosInFront)
         {
-            printf("ZERO\n");
             str[i] = '0';
             i--;
             continue;
