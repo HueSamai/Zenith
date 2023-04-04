@@ -5,6 +5,7 @@
 #include "main.h"
 #include "errors.h"
 #include "c-hashmap/map.h"
+#include <math.h>
 
 #define MAX_NAME_LENGTH 50
 
@@ -78,58 +79,59 @@ int getLengthOfInt(int n)
     return length;
 }
 
-int ACCURACY_LIMIT = 7;
+int ACCURACY_LIMIT = 5;
+int ACCURACY_MUL = 0;
 char *tostring(double d)
 {
-    int a = d;
+    if (ACCURACY_MUL == 0)
+    {
+        ACCURACY_MUL = pow(10, ACCURACY_LIMIT);
+    }
+
+    int a = round(d * ACCURACY_MUL);
     int decimalPoint = getLengthOfInt((int)d);
     int numberOfZerosInFront = 0;
-
-    int n = 0;
-    int k = 0;
-    while (d != (double) a && k < ACCURACY_LIMIT)
-    {
-        if (a == 0)
-        {
-            numberOfZerosInFront++;
-        }
-        d *= 10;
-        a = d;
-        k++;
-    }
-
+    
     int length = getLengthOfInt(a);
-
-    int additional = 1;
-    if (decimalPoint == 0)
+    if (d < 1)
     {
-        additional = 0;
+        numberOfZerosInFront = getLengthOfInt((d + 1) * ACCURACY_MUL) - length;
     }
-    char *str = (char *)malloc(length + 1 + additional);
 
-    int i = numberOfZerosInFront + length - 1 + additional;
+    int strLength = numberOfZerosInFront + length;
+    if (decimalPoint == strLength) // checks if decimal point is going to be displayed
+    {
+        strLength--;
+    }
+    char *str = (char *)malloc(strLength);
+
+    int i = strLength;
     int rem;
     while (i > -1)
     {
-        if (i == decimalPoint)
+        if (i == decimalPoint) // checks if should display decimal pint
         {
             str[i] = '.';
             i--;
             continue;
         }
+        
+        // decides whether it should fill spot with zero
         if (i < numberOfZerosInFront)
         {
             str[i] = '0';
             i--;
             continue;
         }
+
+        // gets the next digit
         rem = a % 10;
         str[i] = rem + '0';
         a /= 10;
         i--;
     }
 
-    str[numberOfZerosInFront + length + additional] = '\0';
+    str[numberOfZerosInFront + length + 1] = '\0'; // adds \0 to show end of string
     return str;
 }
 
