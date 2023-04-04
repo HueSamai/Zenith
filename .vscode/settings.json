@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "main.h": "c",
+        "stdlib.h": "c",
+        "string.h": "c",
+        "type_traits": "c",
+        "xtr1common": "c",
+        "cstdlib": "c"
+    }
+}
